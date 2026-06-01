@@ -55,7 +55,7 @@ async def on_ready():
 @app_commands.describe(던전명="대궁둥, 신전, 신단, 폐기장 중 하나")
 async def ranking(interaction: discord.Interaction, 던전명: str):
 
-```
+
 data = get_record_data()
 
 header_row = None
@@ -117,7 +117,7 @@ for i, (name, score) in enumerate(ranking_list[:10]):
     msg += f"{prefix} {name} - {score}\n"
 
 await interaction.response.send_message(msg)
-```
+
 
 
 
