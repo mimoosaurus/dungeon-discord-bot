@@ -55,109 +55,70 @@ async def on_ready():
 @app_commands.describe(던전명="대궁둥, 신전, 신단, 폐기장 중 하나")
 async def ranking(interaction: discord.Interaction, 던전명: str):
 
-    data = get_record_data()
+```
+data = get_record_data()
 
-    header_row = None
+header_row = None
 
-    for row in data:
-        if "대궁둥" in row and "신전" in row:
-            header_row = row
-            break
+for row in data:
+    if "대궁둥" in row and "신전" in row:
+        header_row = row
+        break
 
-    if not header_row:
-        await interaction.response.send_message(
-            "기록표 헤더를 찾을 수 없습니다.",
-            ephemeral=True
-        )
-        return
-
-    headers = header_row
-    header_index = data.index(header_row)
-
-    if 던전명 not in headers:
-        await interaction.response.send_message(
-            "던전명을 확인해주세요.\n대궁둥 / 신전 / 신단 / 폐기장",
-            ephemeral=True
-        )
-        return
-
-    col = headers.index(던전명)
-
-    ranking_list = []
-
-    for row in data[header_index + 1:]:
-
-        try:
-            name = row[0].strip()
-
-            if not name:
-                continue
-
-            value = int(row[col])
-
-            ranking_list.append((name, value))
-
-        except:
-            pass
-
-    ranking_list.sort(key=lambda x: x[1])
-
-    msg = f"🏆 {던전명} 랭킹\n\n"
-
-    medals = ["🥇", "🥈", "🥉"]
-
-    for i, (name, score) in enumerate(ranking_list[:10]):
-
-        if i < 3:
-            prefix = medals[i]
-        else:
-            prefix = f"{i+1}위"
-
-        msg += f"{prefix} {name} - {score}\n"
-
-    await interaction.response.send_message(msg)
+if header_row is None:
+    await interaction.response.send_message(
+        "기록표 헤더를 찾을 수 없습니다.",
+        ephemeral=True
+    )
     return
 
 headers = header_row
 header_index = data.index(header_row)
 
-    if 던전명 not in headers:
-        await interaction.response.send_message(
-            "던전명을 확인해주세요.\n대궁둥 / 신전 / 신단 / 폐기장",
-            ephemeral=True
-        )
-        return
+if 던전명 not in headers:
+    await interaction.response.send_message(
+        f"입력한 던전명: {던전명}\n사용 가능: {', '.join(headers[:5])}",
+        ephemeral=True
+    )
+    return
 
-    col = headers.index(던전명)
+col = headers.index(던전명)
 
-    ranking_list = []
+ranking_list = []
 
-   for row in data[header_index + 1:]:
-        try:
-            name = row[0]
-            value = int(row[col])
+for row in data[header_index + 1:]:
 
-            ranking_list.append((name, value))
+    try:
+        name = row[0].strip()
 
-        except:
-            pass
+        if not name:
+            continue
 
-    ranking_list.sort(key=lambda x: x[1])
+        value = int(row[col])
 
-    msg = f"🏆 {던전명} 랭킹\n\n"
+        ranking_list.append((name, value))
 
-    medals = ["🥇", "🥈", "🥉"]
+    except:
+        pass
 
-    for i, (name, score) in enumerate(ranking_list[:10]):
+ranking_list.sort(key=lambda x: x[1])
 
-        if i < 3:
-            prefix = medals[i]
-        else:
-            prefix = f"{i+1}위"
+msg = f"🏆 {던전명} 랭킹\n\n"
 
-        msg += f"{prefix} {name} - {score}\n"
+medals = ["🥇", "🥈", "🥉"]
 
-    await interaction.response.send_message(msg)
+for i, (name, score) in enumerate(ranking_list[:10]):
+
+    if i < 3:
+        prefix = medals[i]
+    else:
+        prefix = f"{i+1}위"
+
+    msg += f"{prefix} {name} - {score}\n"
+
+await interaction.response.send_message(msg)
+```
+
 
 
 @tree.command(name="기록", description="내 기록 보기")
