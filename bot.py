@@ -4,10 +4,26 @@ import io
 import requests
 import discord
 from discord import app_commands
+
+from flask import Flask
+from threading import Thread
 from discord.ext import tasks
 
 TOKEN = os.getenv("DISCORD_TOKEN")
+app = Flask(__name__)
 
+@app.route("/")
+def home():
+    return "Dungeon Bot Running"
+
+def run_web():
+    port = int(os.environ.get("PORT", 10000))
+    app.run(
+        host="0.0.0.0",
+        port=port
+    )
+
+Thread(target=run_web, daemon=True).start()
 SHEET_ID = "1gCHBFS3ZgrURP8IhVzK9zO2n_aKVBX4GPC3SmwhPtsw"
 
 RECORD_CHANNEL_ID = 1510834661822169261
