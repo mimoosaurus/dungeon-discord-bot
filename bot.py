@@ -57,7 +57,22 @@ async def ranking(interaction: discord.Interaction, 던전명: str):
 
     data = get_record_data()
 
-    headers = data[0]
+header_row = None
+
+for row in data:
+    if "대궁둥" in row and "신전" in row:
+        header_row = row
+        break
+
+if not header_row:
+    await interaction.response.send_message(
+        "기록표 헤더를 찾을 수 없습니다.",
+        ephemeral=True
+    )
+    return
+
+headers = header_row
+header_index = data.index(header_row)
 
     if 던전명 not in headers:
         await interaction.response.send_message(
@@ -70,7 +85,7 @@ async def ranking(interaction: discord.Interaction, 던전명: str):
 
     ranking_list = []
 
-    for row in data[1:]:
+   for row in data[header_index + 1:]:
         try:
             name = row[0]
             value = int(row[col])
