@@ -51,7 +51,7 @@ async def ranking(interaction: discord.Interaction, 던전명: str):
             break
 
     if header_row is None:
-        await interaction.response.send_message(던전명, "헤더를 찾을 수 없습니다.")
+        await interaction.response.send_message(던전명 + "헤더를 찾을 수 없습니다.")
         return
 
     headers = header_row
