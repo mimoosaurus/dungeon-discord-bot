@@ -89,13 +89,17 @@ async def ranking(interaction: discord.Interaction, 던전명: str, 닉네임: s
 
     dungeon_names = []
     for i, h in enumerate(headers):
-        if i == name_col or not h.strip() or i >= len(first_data):
+        if i == name_col or not h.strip():
             continue
-        try:
-            int(first_data[i])
-            dungeon_names.append(h)
-        except ValueError:
-            pass
+        for row in data[header_index + 1:]:
+            if i >= len(row) or not row[i].strip():
+                continue
+            try:
+                int(row[i])
+                dungeon_names.append(h)
+                break
+            except ValueError:
+                continue
 
     if 던전명 not in dungeon_names:
         await interaction.response.send_message(
